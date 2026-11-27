@@ -1,6 +1,4 @@
-# Why is this special?
-
-## Extra Features in link-ed
+## Extra Features in Linked 
 
 ### API & Delivery
 | Feature | Detail |
