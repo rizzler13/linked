@@ -1,6 +1,6 @@
 # link-ed
 
-AI-powered website intelligence API. Drop in a URL, get competitor analysis, SEO recommendations, search queries, services, and audience profiling — in seconds.
+AI powered website intelligence API. Drop in a URL, get competitor analysis, SEO recommendations, search queries, services, and audience profiling, in seconds.
 
 > Built as a submission for the Dxora Technologies Python test.
 
@@ -35,7 +35,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 4000
 | Method | Path | Description |
 |---|---|---|
 | `POST` | `/link-analysis` | Full analysis, single JSON response |
-| `POST` | `/link-analysis/stream` | Same analysis via SSE — streams partial results as they arrive |
+| `POST` | `/link-analysis/stream` | Same analysis via SSE, streams partial results as they arrive |
 | `POST` | `/link-analysis/pdf` | Download analysis as PDF (Chromium print engine) |
 | `GET` | `/health` | Health check |
 | `GET` | `/docs` | API documentation |
