@@ -18,6 +18,8 @@ Ping `/health` before demoing.
 ## [Why I cooked this?](cooked.md)
 
 ---
+<img width="1041" height="820" alt="image" src="https://github.com/user-attachments/assets/3788af2b-ed21-459d-85c3-f57f7385fe22" />
+
 
 ## Quick Start
 
@@ -30,6 +32,24 @@ uvicorn app.main:app --host 0.0.0.0 --port 4000
 ```
 
 ---
+### Competitor Analysis
+<img width="941" height="820" alt="image" src="https://github.com/user-attachments/assets/07b81c70-14d8-441b-bab2-9bef0e47eb2b" />
+
+### Search Queries
+<img width="904" height="586" alt="image" src="https://github.com/user-attachments/assets/47d5558e-e315-4083-8588-7587b25024c9" />
+
+### SEO
+<img width="879" height="652" alt="image" src="https://github.com/user-attachments/assets/53f6e8cd-96ab-419f-ae4f-0b1ae69f3b10" />
+
+
+### Services
+<img width="943" height="814" alt="image" src="https://github.com/user-attachments/assets/7904397b-cb1c-4041-a256-06e4391fafdf" />
+
+
+### Audience
+<img width="934" height="776" alt="image" src="https://github.com/user-attachments/assets/3d6b768c-7828-4942-a22a-358e053b4612" />
+
+
 
 ## Endpoints
 
