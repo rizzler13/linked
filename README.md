@@ -10,9 +10,9 @@ AI-powered website intelligence API. Drop in a URL, get competitor analysis, SEO
 
 | | |
 |---|---|
-| **Dashboard** | `<!-- LIVE URL -->` |
-| **API** | `<!-- LIVE URL -->/link-analysis` |
-| **Docs** | `<!-- LIVE URL -->/docs` |
+| **Dashboard** | `https://linked-6oi2.onrender.com` |
+| **API** | `https://linked-6oi2.onrender.com/link-analysis` |
+| **Docs** | `https://linked-6oi2.onrender.com/docs` |
 
 > Free tier on Render — first request after 15 min idle may take ~30s (cold start). Ping `/health` before demoing.
 
