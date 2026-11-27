@@ -8,11 +8,9 @@ AI-powered website intelligence API. Drop in a URL, get competitor analysis, SEO
 
 ## Live
 
-| | |
-|---|---|
-| **Dashboard** | `https://linked-6oi2.onrender.com` |
-| **API** | `https://linked-6oi2.onrender.com/link-analysis` |
-| **Docs** | `https://linked-6oi2.onrender.com/docs` |
+**Dashboard** - https://linked-6oi2.onrender.com
+**API** - https://linked-6oi2.onrender.com/link-analysis
+**Docs** - https://linked-6oi2.onrender.com/docs
 
 Ping `/health` before demoing.
 
