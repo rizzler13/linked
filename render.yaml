@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: link-ed
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false          # set manually in Render dashboard
+      - key: GROQ_API_KEY
+        sync: false          # set manually in Render dashboard
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+    healthCheckPath: /health

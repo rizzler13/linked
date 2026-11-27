@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>link-ed — API Reference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0c0c0e;
+      --surface:   #111114;
+      --overlay:   #18181c;
+      --border:    rgba(255,255,255,0.08);
+      --border-hi: rgba(255,255,255,0.14);
+      --fg:        #f1f1f3;
+      --fg-2:      #9191a4;
+      --fg-3:      #55555f;
+      --fg-4:      #2e2e35;
+      --accent:    #7c7cff;
+      --accent-bg: rgba(124,124,255,0.08);
+      --accent-b:  rgba(124,124,255,0.2);
+      --green:     #34d399;
+      --green-bg:  rgba(52,211,153,0.08);
+      --green-b:   rgba(52,211,153,0.18);
+      --amber:     #fbbf24;
+      --amber-bg:  rgba(251,191,36,0.08);
+      --amber-b:   rgba(251,191,36,0.18);
+      --red:       #fb7185;
+      --red-bg:    rgba(251,113,133,0.08);
+      --red-b:     rgba(251,113,133,0.18);
+      --blue:      #60a5fa;
+      --blue-bg:   rgba(96,165,250,0.08);
+      --blue-b:    rgba(96,165,250,0.18);
+      --mono:      'JetBrains Mono', monospace;
+      --font:      'Inter', system-ui, sans-serif;
+      --sidebar:   240px;
+    }
+
+    [data-theme="light"] {
+      --bg:        #fafafa;
+      --surface:   #ffffff;
+      --overlay:   #f3f3f5;
+      --border:    rgba(0,0,0,0.08);
+      --border-hi: rgba(0,0,0,0.14);
+      --fg:        #111113;
+      --fg-2:      #4b4b58;
+      --fg-3:      #9494a0;
+      --fg-4:      #d0d0d8;
+      --accent:    #5a5aef;
+      --accent-bg: rgba(90,90,239,0.07);
+      --accent-b:  rgba(90,90,239,0.2);
+      --green:     #059669;
+      --green-bg:  rgba(5,150,105,0.06);
+      --green-b:   rgba(5,150,105,0.16);
+      --amber:     #d97706;
+      --amber-bg:  rgba(217,119,6,0.06);
+      --amber-b:   rgba(217,119,6,0.16);
+      --red:       #e11d48;
+      --red-bg:    rgba(225,29,72,0.06);
+      --red-b:     rgba(225,29,72,0.16);
+      --blue:      #2563eb;
+      --blue-bg:   rgba(37,99,235,0.06);
+      --blue-b:    rgba(37,99,235,0.16);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.65;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ---- Top bar ---- */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 20px; }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .logo-link { color: var(--fg); }
+    .logo-sep  { color: var(--accent); }
+    .logo-ed   { color: var(--fg-2); font-weight: 700; }
+
+    .doc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--fg-3);
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+    .tb-link {
+      font-size: 12px;
+      color: var(--fg-2);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .tb-link:hover { color: var(--fg); }
+
+    .btn-icon {
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: none;
+      color: var(--fg-3);
+      cursor: pointer;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-icon:hover { border-color: var(--border-hi); color: var(--fg); }
+    .btn-icon svg { width: 14px; height: 14px; }
+
+    /* ---- Layout ---- */
+    .layout {
+      display: flex;
+      padding-top: 64px;
+      flex: 1;
+    }
+
+    /* ---- Sidebar ---- */
+    .sidebar {
+      width: var(--sidebar);
+      flex-shrink: 0;
+      position: fixed;
+      top: 64px;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--overlay); border-radius: 100px; }
+
+    .nav-group { margin-bottom: 24px; }
+    .nav-group-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--fg-3);
+      padding: 0 20px;
+      margin-bottom: 6px;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 6px 20px;
+      font-size: 13px;
+      color: var(--fg-2);
+      text-decoration: none;
+      transition: color .12s, background .12s;
+      border-left: 2px solid transparent;
+    }
+    .nav-link:hover { color: var(--fg); background: var(--overlay); }
+    .nav-link.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-bg); }
+
+    .nav-method {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      font-family: var(--mono);
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .nav-method.POST { background: var(--blue-bg); border: 1px solid var(--blue-b); color: var(--blue); }
+    .nav-method.GET  { background: var(--green-bg); border: 1px solid var(--green-b); color: var(--green); }
+
+    /* ---- Main content ---- */
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1;
+      max-width: 820px;
+      padding: 48px 56px 100px;
+    }
+
+    /* ---- Section ---- */
+    .section { margin-bottom: 56px; scroll-margin-top: 72px; }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--fg);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--fg);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 { font-size: 14px; font-weight: 600; color: var(--fg); margin: 20px 0 8px; }
+    p  { font-size: 14px; color: var(--fg-2); line-height: 1.7; margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ---- Method badge ---- */
+    .endpoint-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-family: var(--mono);
+    }
+    .method {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .method.POST { background: var(--blue-bg); border: 1px solid var(--blue-b); color: var(--blue); }
+    .method.GET  { background: var(--green-bg); border: 1px solid var(--green-b); color: var(--green); }
+    .path { font-size: 14px; color: var(--fg); }
+    .path .seg { color: var(--accent); }
+
+    /* ---- Code block ---- */
+    pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.65;
+      margin: 10px 0 16px;
+    }
+    pre::-webkit-scrollbar { height: 4px; }
+    pre::-webkit-scrollbar-thumb { background: var(--overlay); border-radius: 100px; }
+
+    .j-k    { color: var(--accent); }
+    .j-s    { color: var(--green); }
+    .j-n    { color: var(--amber); }
+    .j-b    { color: var(--blue); }
+    .j-null { color: var(--fg-3); }
+    .j-p    { color: var(--fg-3); }  /* punctuation */
+
+    /* ---- Field table ---- */
+    .table-wrap { overflow-x: auto; margin: 10px 0 16px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--fg-3);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg-2);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--overlay); }
+
+    .td-name { font-family: var(--mono); font-size: 12px; color: var(--fg); white-space: nowrap; }
+    .td-type { font-family: var(--mono); font-size: 11px; color: var(--accent); white-space: nowrap; }
+    .td-req  { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 100px; white-space: nowrap; }
+    .req-y   { background: var(--blue-bg); border: 1px solid var(--blue-b); color: var(--blue); }
+    .req-n   { background: var(--overlay); border: 1px solid var(--border); color: var(--fg-3); }
+
+    /* ---- Error table ---- */
+    .err-code {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .http-4 { background: var(--amber-bg); border: 1px solid var(--amber-b); color: var(--amber); }
+    .http-5 { background: var(--red-bg);   border: 1px solid var(--red-b);   color: var(--red); }
+
+    /* ---- Callout ---- */
+    .callout {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 14px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .callout.info   { background: var(--blue-bg);  border: 1px solid var(--blue-b);  color: var(--fg-2); }
+    .callout.warn   { background: var(--amber-bg); border: 1px solid var(--amber-b); color: var(--fg-2); }
+    .callout.tip    { background: var(--green-bg); border: 1px solid var(--green-b); color: var(--fg-2); }
+    .callout-icon   { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+
+    /* ---- Inline code ---- */
+    code {
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--overlay);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: var(--accent);
+    }
+
+    /* ---- Divider ---- */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    /* ---- Scroll indicator ---- */
+    .progress {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 101;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width .05s linear;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div class="progress"><div class="progress-fill" id="prog"></div></div>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a class="logo" href="/"><span class="logo-link">link</span><span class="logo-sep">-</span><span class="logo-ed">ed</span></a>
+    <span class="doc-badge">API Reference</span>
+  </div>
+  <div class="topbar-right">
+    <a class="tb-link" href="/">Try it</a>
+    <button class="btn-icon" onclick="toggleTheme()" title="Toggle theme">
+      <svg id="iDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <svg id="iLight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="nav-group">
+      <div class="nav-group-label">Getting started</div>
+      <a class="nav-link" href="#overview">Overview</a>
+      <a class="nav-link" href="#authentication">Authentication</a>
+      <a class="nav-link" href="#rate-limits">Rate Limits &amp; Caching</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Endpoint</div>
+      <a class="nav-link" href="#endpoint">
+        <span class="nav-method POST">POST</span>link-analysis
+      </a>
+      <a class="nav-link" href="#request">Request</a>
+      <a class="nav-link" href="#response">Response</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Response schema</div>
+      <a class="nav-link" href="#schema-brand">Brand</a>
+      <a class="nav-link" href="#schema-competitors">Competitors</a>
+      <a class="nav-link" href="#schema-queries">Search Queries</a>
+      <a class="nav-link" href="#schema-seo">SEO</a>
+      <a class="nav-link" href="#schema-services">Services</a>
+      <a class="nav-link" href="#schema-audience">Audience</a>
+      <a class="nav-link" href="#schema-meta">Meta</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Reference</div>
+      <a class="nav-link" href="#errors">Error Codes</a>
+      <a class="nav-link" href="#examples">Examples</a>
+      <a class="nav-link" href="#health">
+        <span class="nav-method GET">GET</span>health
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Overview -->
+    <div class="section" id="overview">
+      <h1>API Reference</h1>
+      <p>link-ed is an AI-powered website intelligence API. Submit any public URL and receive structured analysis across five dimensions: brand profile, competitor intelligence, targeted search queries, SEO improvements, and audience segments.</p>
+      <p>The pipeline fetches the URL, extracts structured content across seven layers (JSON-LD → OpenGraph → meta tags → navigation → headings → body → footer), then runs a two-stage LLM analysis using Gemini with Groq as a fallback.</p>
+
+      <div class="callout info">
+        <span class="callout-icon">ℹ</span>
+        <span>Analysis typically takes <strong>15–25 seconds</strong> per URL. Results are cached for 10 minutes — repeated requests to the same URL return instantly.</span>
+      </div>
+
+      <h3>Base URL</h3>
+      <pre><span class="j-s">http://localhost:4000</span>  <span class="j-p"><!-- local --></span>
+<span class="j-s">https://your-app.onrender.com</span>  <span class="j-p"><!-- deployed --></span></pre>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Authentication -->
+    <div class="section" id="authentication">
+      <h2>Authentication</h2>
+      <p>The API does not require client authentication. API keys for Gemini and Groq are configured server-side via environment variables and are never exposed to clients.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Variable</th><th>Description</th><th>Required</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">GEMINI_API_KEY</td><td>Google Gemini API key — primary LLM provider</td><td><span class="td-req req-y">Required</span></td></tr>
+            <tr><td class="td-name">GROQ_API_KEY</td><td>Groq API key — fallback LLM provider</td><td><span class="td-req req-n">Optional</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Set these in a <code>.env</code> file at the project root. See <code>.env.example</code> for the template.</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Rate limits -->
+    <div class="section" id="rate-limits">
+      <h2>Rate Limits &amp; Caching</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Limit</th><th>Value</th><th>Scope</th></tr></thead>
+          <tbody>
+            <tr><td>Request rate</td><td>5 requests per minute</td><td>Per IP address</td></tr>
+            <tr><td>Result cache TTL</td><td>10 minutes</td><td>Per URL</td></tr>
+            <tr><td>Cache size</td><td>100 URLs</td><td>Server-wide (LRU)</td></tr>
+            <tr><td>Body size</td><td>2 MB max</td><td>Per fetched page</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>When the rate limit is exceeded, the API returns <code>429 Too Many Requests</code>. When a URL is cached, the response includes the same <code>request_id</code> and <code>latency_ms</code> as the original analysis.</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Endpoint -->
+    <div class="section" id="endpoint">
+      <h2>Analyze a website</h2>
+      <div class="endpoint-row">
+        <span class="method POST">POST</span>
+        <span class="path"><span class="seg">/link-analysis</span></span>
+      </div>
+      <p>Fetches the website at the given URL, extracts content, and returns structured business analysis across five sections.</p>
+    </div>
+
+    <!-- Request -->
+    <div class="section" id="request">
+      <h2>Request</h2>
+      <h3>Headers</h3>
+      <pre><span class="j-k">Content-Type</span><span class="j-p">: </span><span class="j-s">application/json</span></pre>
+
+      <h3>Body</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="td-name">url</td>
+              <td class="td-type">string</td>
+              <td><span class="td-req req-y">Required</span></td>
+              <td>Fully qualified URL to analyze. Must start with <code>http://</code> or <code>https://</code>. Private/internal addresses are blocked (SSRF protection).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Example request</h3>
+      <pre><span class="j-p">curl -X POST http://localhost:4000/link-analysis \
+  -H "</span><span class="j-k">Content-Type</span><span class="j-p">: </span><span class="j-s">application/json</span><span class="j-p">" \
+  -d '</span><span class="j-p">{</span>
+    <span class="j-k">"url"</span><span class="j-p">: </span><span class="j-s">"https://stripe.com"</span>
+  <span class="j-p">}'</span></pre>
+    </div>
+
+    <!-- Response -->
+    <div class="section" id="response">
+      <h2>Response</h2>
+      <p>All successful responses have <code>HTTP 200</code> and return JSON with the following top-level shape:</p>
+      <pre><span class="j-p">{</span>
+  <span class="j-k">"success"</span><span class="j-p">: </span><span class="j-b">true</span><span class="j-p">,</span>
+  <span class="j-k">"website"</span><span class="j-p">: </span><span class="j-s">"https://stripe.com"</span><span class="j-p">,</span>
+  <span class="j-k">"meta"</span><span class="j-p">: { </span><span class="j-p">... },</span>
+  <span class="j-k">"brand"</span><span class="j-p">: { </span><span class="j-p">... },</span>
+  <span class="j-k">"analysis"</span><span class="j-p">: {</span>
+    <span class="j-k">"competitor_analysis"</span><span class="j-p">: { </span><span class="j-p">... },</span>
+    <span class="j-k">"target_search_queries"</span><span class="j-p">: [ </span><span class="j-p">... ],</span>
+    <span class="j-k">"seo_improvements"</span><span class="j-p">: { </span><span class="j-p">... },</span>
+    <span class="j-k">"top_services"</span><span class="j-p">: [ </span><span class="j-p">... ],</span>
+    <span class="j-k">"target_audience"</span><span class="j-p">: { </span><span class="j-p">... }</span>
+  <span class="j-p">}</span>
+<span class="j-p">}</span></pre>
+    </div>
+
+    <!-- Brand schema -->
+    <div class="section" id="schema-brand">
+      <h2>Brand</h2>
+      <p>Factual brand profile extracted directly from the page content.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">name</td><td class="td-type">string</td><td>Brand or company name</td></tr>
+            <tr><td class="td-name">category</td><td class="td-type">string</td><td>Primary business category</td></tr>
+            <tr><td class="td-name">summary</td><td class="td-type">string</td><td>1–2 sentence business description</td></tr>
+            <tr><td class="td-name">site_type</td><td class="td-type">enum</td><td><code>saas</code> · <code>e_commerce</code> · <code>local_business</code> · <code>agency</code> · <code>blog</code> · <code>nonprofit</code> · <code>corporate</code> · <code>educational</code> · <code>other</code></td></tr>
+            <tr><td class="td-name">competitive_advantages</td><td class="td-type">string[]</td><td>Key differentiators observed in the content</td></tr>
+            <tr><td class="td-name">opportunities</td><td class="td-type">string[]</td><td>AI-suggested areas for market positioning improvement</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Competitors schema -->
+    <div class="section" id="schema-competitors">
+      <h2>Competitor Analysis</h2>
+      <p>Competitive landscape generated from the brand profile. All competitors are AI-suggested — not scraped from the target website.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">brand_overview</td><td class="td-type">string</td><td>Narrative summary of the brand's competitive position</td></tr>
+            <tr><td class="td-name">competitors</td><td class="td-type">Competitor[]</td><td>Array of competitor objects (minimum 3)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Competitor object</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">name</td><td class="td-type">string</td><td>Competitor company name</td></tr>
+            <tr><td class="td-name">domain</td><td class="td-type">string | null</td><td>Primary domain (e.g. <code>stripe.com</code>)</td></tr>
+            <tr><td class="td-name">domain_verified</td><td class="td-type">boolean | null</td><td>Whether the domain responded to a HEAD request</td></tr>
+            <tr><td class="td-name">source</td><td class="td-type">"ai_suggested"</td><td>Always <code>ai_suggested</code> — never fabricated from page content</td></tr>
+            <tr><td class="td-name">main_service</td><td class="td-type">string</td><td>Primary service or product</td></tr>
+            <tr><td class="td-name">target_market</td><td class="td-type">string</td><td>Primary customer segment</td></tr>
+            <tr><td class="td-name">strengths</td><td class="td-type">string[]</td><td>Competitor's key advantages</td></tr>
+            <tr><td class="td-name">weaknesses_or_gaps</td><td class="td-type">string[]</td><td>Areas where the competitor is weak or missing</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Queries schema -->
+    <div class="section" id="schema-queries">
+      <h2>Target Search Queries</h2>
+      <p>Exactly 5 platform-specific search queries a potential customer might use to find the business. One per platform.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">query</td><td class="td-type">string</td><td>The search query, phrased naturally for the platform</td></tr>
+            <tr><td class="td-name">platform</td><td class="td-type">enum</td><td><code>Google</code> · <code>Facebook</code> · <code>Instagram</code> · <code>LinkedIn</code> · <code>X</code></td></tr>
+            <tr><td class="td-name">search_intent</td><td class="td-type">string</td><td>Intent category (e.g. "Service Search", "B2B Discovery")</td></tr>
+            <tr><td class="td-name">business_relevance</td><td class="td-type">string</td><td>Why this query is relevant to the business</td></tr>
+            <tr><td class="td-name">target_audience</td><td class="td-type">string</td><td>Who would use this query</td></tr>
+            <tr><td class="td-name">source</td><td class="td-type">"ai_suggested"</td><td>Always <code>ai_suggested</code>. No search volume data is returned.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SEO schema -->
+    <div class="section" id="schema-seo">
+      <h2>SEO Improvements</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Constraint</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">primary_keyword</td><td class="td-type">string</td><td>Appears in <code>recommended_title</code></td></tr>
+            <tr><td class="td-name">secondary_keywords</td><td class="td-type">string[]</td><td>—</td></tr>
+            <tr><td class="td-name">long_tail_keywords</td><td class="td-type">string[]</td><td>—</td></tr>
+            <tr><td class="td-name">recommended_title</td><td class="td-type">string</td><td>≤ 60 characters</td></tr>
+            <tr><td class="td-name">meta_description</td><td class="td-type">string</td><td>≤ 155 characters</td></tr>
+            <tr><td class="td-name">supporting_content</td><td class="td-type">SupportingContent[]</td><td>Recommended new or existing pages</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>SupportingContent object</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">type</td><td class="td-type">string</td><td><code>faq</code> · <code>blog</code> · <code>landing_page</code> · <code>location_page</code> · etc.</td></tr>
+            <tr><td class="td-name">title</td><td class="td-type">string</td><td>Suggested page title</td></tr>
+            <tr><td class="td-name">rationale</td><td class="td-type">string</td><td>Why this page would improve SEO</td></tr>
+            <tr><td class="td-name">url</td><td class="td-type">string | null</td><td>Existing URL on the site if the page already exists</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Services schema -->
+    <div class="section" id="schema-services">
+      <h2>Top Services</h2>
+      <p>Up to 5 services identified from the website. Extracted services are sourced directly from page content; inferred services are reasonable additions based on the brand profile.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">service_name</td><td class="td-type">string</td><td>Service or product name</td></tr>
+            <tr><td class="td-name">description</td><td class="td-type">string</td><td>Short service description</td></tr>
+            <tr><td class="td-name">target_industry</td><td class="td-type">string</td><td>Relevant industry segment</td></tr>
+            <tr><td class="td-name">target_customer</td><td class="td-type">string</td><td>Ideal customer profile</td></tr>
+            <tr><td class="td-name">main_benefit</td><td class="td-type">string</td><td>Primary value proposition</td></tr>
+            <tr><td class="td-name">source</td><td class="td-type">enum</td><td><code>"extracted"</code> — from page content · <code>"inferred"</code> — AI-suggested</td></tr>
+            <tr><td class="td-name">evidence</td><td class="td-type">string | null</td><td>Verbatim text from the page that supports this service (extracted only)</td></tr>
+            <tr><td class="td-name">url</td><td class="td-type">string | null</td><td>Direct link to the service page, if found in the crawled content</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Audience schema -->
+    <div class="section" id="schema-audience">
+      <h2>Target Audience</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">primary_audience</td><td class="td-type">AudienceSegment[]</td><td>Main customer segments</td></tr>
+            <tr><td class="td-name">secondary_audience</td><td class="td-type">AudienceSegment[]</td><td>Adjacent or emerging segments</td></tr>
+            <tr><td class="td-name">industries</td><td class="td-type">string[]</td><td>Relevant industry verticals</td></tr>
+            <tr><td class="td-name">geographical_focus</td><td class="td-type">string | null</td><td>Geographic market if detectable</td></tr>
+            <tr><td class="td-name">customer_needs</td><td class="td-type">string[]</td><td>Core problems the business solves</td></tr>
+            <tr><td class="td-name">recommended_segments</td><td class="td-type">string[]</td><td>Suggested marketing audience segments</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>AudienceSegment object</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">segment_name</td><td class="td-type">string</td><td>Audience segment label</td></tr>
+            <tr><td class="td-name">business_type</td><td class="td-type">string</td><td>SMB · Enterprise · Consumer · etc.</td></tr>
+            <tr><td class="td-name">requirement</td><td class="td-type">string</td><td>Primary need this segment has</td></tr>
+            <tr><td class="td-name">needs_and_challenges</td><td class="td-type">string[]</td><td>Pain points</td></tr>
+            <tr><td class="td-name">interests</td><td class="td-type">string[]</td><td>Topics and interests relevant to this segment</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Meta schema -->
+    <div class="section" id="schema-meta">
+      <h2>Meta Envelope</h2>
+      <p>Operational metadata included in every response.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">request_id</td><td class="td-type">string</td><td>UUID for log correlation and support tracing</td></tr>
+            <tr><td class="td-name">provider</td><td class="td-type">string</td><td><code>gemini</code> or <code>groq</code></td></tr>
+            <tr><td class="td-name">model</td><td class="td-type">string</td><td>Exact model name used</td></tr>
+            <tr><td class="td-name">latency_ms</td><td class="td-type">integer</td><td>Total end-to-end latency in milliseconds</td></tr>
+            <tr><td class="td-name">tokens</td><td class="td-type">TokenUsage</td><td><code>call_a_in</code> · <code>call_a_out</code> · <code>call_b_in</code> · <code>call_b_out</code></td></tr>
+            <tr><td class="td-name">content_quality</td><td class="td-type">enum</td><td><code>rich</code> — full content · <code>partial</code> — JS-heavy / blocked · <code>minimal</code> — near-empty</td></tr>
+            <tr><td class="td-name">pages_fetched</td><td class="td-type">integer</td><td>Number of pages crawled (1–3)</td></tr>
+            <tr><td class="td-name">warnings</td><td class="td-type">string[]</td><td>Non-fatal issues encountered during analysis</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Errors -->
+    <div class="section" id="errors">
+      <h2>Error Codes</h2>
+      <p>Error responses have the shape <code>{"success": false, "error": {"code": "...", "message": "..."}}</code>.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>HTTP</th><th>Code</th><th>Cause</th></tr></thead>
+          <tbody>
+            <tr><td><span class="err-code http-4">400</span></td><td class="td-name">SSRF_BLOCKED</td><td>URL resolves to a private/loopback/internal address</td></tr>
+            <tr><td><span class="err-code http-4">413</span></td><td class="td-name">CONTENT_TOO_LARGE</td><td>Response body exceeds 2 MB</td></tr>
+            <tr><td><span class="err-code http-4">415</span></td><td class="td-name">NOT_HTML</td><td>URL returned a non-HTML content type (PDF, JSON, etc.)</td></tr>
+            <tr><td><span class="err-code http-4">422</span></td><td class="td-name">—</td><td>Request body validation failed (missing or invalid <code>url</code>)</td></tr>
+            <tr><td><span class="err-code http-4">429</span></td><td class="td-name">—</td><td>Rate limit exceeded (5 req/min per IP)</td></tr>
+            <tr><td><span class="err-code http-5">502</span></td><td class="td-name">SITE_UNREACHABLE</td><td>Target website refused connection or returned 4xx/5xx</td></tr>
+            <tr><td><span class="err-code http-5">503</span></td><td class="td-name">LLM_UNAVAILABLE</td><td>Both Gemini and Groq failed or are unavailable</td></tr>
+            <tr><td><span class="err-code http-5">504</span></td><td class="td-name">FETCH_TIMEOUT</td><td>Target website did not respond within 25 seconds</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Examples -->
+    <div class="section" id="examples">
+      <h2>Full Example</h2>
+      <h3>Request</h3>
+      <pre><span class="j-p">POST /link-analysis HTTP/1.1
+Host: localhost:4000
+Content-Type: application/json
+
+{</span>
+  <span class="j-k">"url"</span><span class="j-p">: </span><span class="j-s">"https://stripe.com"</span>
+<span class="j-p">}</span></pre>
+
+      <h3>Response (abbreviated)</h3>
+      <pre><span class="j-p">{</span>
+  <span class="j-k">"success"</span><span class="j-p">: </span><span class="j-b">true</span><span class="j-p">,</span>
+  <span class="j-k">"website"</span><span class="j-p">: </span><span class="j-s">"https://stripe.com"</span><span class="j-p">,</span>
+  <span class="j-k">"meta"</span><span class="j-p">: {</span>
+    <span class="j-k">"request_id"</span><span class="j-p">: </span><span class="j-s">"a1b2c3d4-..."</span><span class="j-p">,</span>
+    <span class="j-k">"provider"</span><span class="j-p">: </span><span class="j-s">"gemini"</span><span class="j-p">,</span>
+    <span class="j-k">"model"</span><span class="j-p">: </span><span class="j-s">"gemini-3-flash-preview"</span><span class="j-p">,</span>
+    <span class="j-k">"latency_ms"</span><span class="j-p">: </span><span class="j-n">21340</span><span class="j-p">,</span>
+    <span class="j-k">"content_quality"</span><span class="j-p">: </span><span class="j-s">"partial"</span><span class="j-p">,</span>
+    <span class="j-k">"pages_fetched"</span><span class="j-p">: </span><span class="j-n">1</span>
+  <span class="j-p">},</span>
+  <span class="j-k">"brand"</span><span class="j-p">: {</span>
+    <span class="j-k">"name"</span><span class="j-p">: </span><span class="j-s">"Stripe"</span><span class="j-p">,</span>
+    <span class="j-k">"category"</span><span class="j-p">: </span><span class="j-s">"Financial Services &amp; Fintech"</span><span class="j-p">,</span>
+    <span class="j-k">"summary"</span><span class="j-p">: </span><span class="j-s">"Global payments infrastructure for internet businesses."</span><span class="j-p">,</span>
+    <span class="j-k">"site_type"</span><span class="j-p">: </span><span class="j-s">"saas"</span>
+  <span class="j-p">},</span>
+  <span class="j-k">"analysis"</span><span class="j-p">: {</span>
+    <span class="j-k">"competitor_analysis"</span><span class="j-p">: {</span>
+      <span class="j-k">"competitors"</span><span class="j-p">: [</span>
+        <span class="j-p">{</span>
+          <span class="j-k">"name"</span><span class="j-p">: </span><span class="j-s">"Braintree"</span><span class="j-p">,</span>
+          <span class="j-k">"domain"</span><span class="j-p">: </span><span class="j-s">"braintreepayments.com"</span><span class="j-p">,</span>
+          <span class="j-k">"domain_verified"</span><span class="j-p">: </span><span class="j-b">true</span><span class="j-p">,</span>
+          <span class="j-k">"source"</span><span class="j-p">: </span><span class="j-s">"ai_suggested"</span>
+        <span class="j-p">}</span>
+      <span class="j-p">]</span>
+    <span class="j-p">},</span>
+    <span class="j-k">"top_services"</span><span class="j-p">: [</span>
+      <span class="j-p">{</span>
+        <span class="j-k">"service_name"</span><span class="j-p">: </span><span class="j-s">"Payments"</span><span class="j-p">,</span>
+        <span class="j-k">"source"</span><span class="j-p">: </span><span class="j-s">"extracted"</span><span class="j-p">,</span>
+        <span class="j-k">"url"</span><span class="j-p">: </span><span class="j-s">"https://stripe.com/payments"</span>
+      <span class="j-p">}</span>
+    <span class="j-p">]</span>
+  <span class="j-p">}</span>
+<span class="j-p">}</span></pre>
+
+      <div class="callout tip">
+        <span class="callout-icon">↗</span>
+        <span>The <code>url</code> field on services is populated when the LLM finds a direct link to that service page in the crawled HTML — for example, a navigation link to <code>https://stripe.com/payments</code>.</span>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Health -->
+    <div class="section" id="health">
+      <h2>Health check</h2>
+      <div class="endpoint-row">
+        <span class="method GET">GET</span>
+        <span class="path"><span class="seg">/health</span></span>
+      </div>
+      <p>Returns server status. Use for uptime monitoring and deployment health checks.</p>
+      <pre><span class="j-p">{</span>
+  <span class="j-k">"status"</span><span class="j-p">: </span><span class="j-s">"ok"</span><span class="j-p">,</span>
+  <span class="j-k">"version"</span><span class="j-p">: </span><span class="j-s">"1.0.0"</span>
+<span class="j-p">}</span></pre>
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* Theme */
+(function(){
+  const t = localStorage.getItem('le-theme') || 'dark';
+  applyTheme(t);
+})();
+function applyTheme(m) {
+  document.documentElement.setAttribute('data-theme', m);
+  document.getElementById('iDark').style.display  = m==='light' ? 'block' : 'none';
+  document.getElementById('iLight').style.display = m==='dark'  ? 'block' : 'none';
+  localStorage.setItem('le-theme', m);
+}
+function toggleTheme() {
+  const c = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(c==='dark' ? 'light' : 'dark');
+}
+
+/* Active nav link on scroll */
+const sections = document.querySelectorAll('.section');
+const navLinks  = document.querySelectorAll('.nav-link');
+const prog      = document.getElementById('prog');
+
+function onScroll() {
+  const scrollTop = window.scrollY;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (docH > 0 ? (scrollTop / docH * 100) : 0) + '%';
+
+  let cur = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 90) cur = s.id;
+  });
+  navLinks.forEach(l => {
+    const href = l.getAttribute('href').slice(1);
+    l.classList.toggle('active', href === cur);
+  });
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+</script>
+</body>
+</html>
