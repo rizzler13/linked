@@ -14,7 +14,7 @@ AI-powered website intelligence API. Drop in a URL, get competitor analysis, SEO
 | **API** | `https://linked-6oi2.onrender.com/link-analysis` |
 | **Docs** | `https://linked-6oi2.onrender.com/docs` |
 
-> Free tier on Render — first request after 15 min idle may take ~30s (cold start). Ping `/health` before demoing.
+Ping `/health` before demoing.
 
 ---
 
@@ -292,12 +292,3 @@ No API keys needed — LLM providers are mocked.
 
 ---
 
-## Deploy (Render)
-
-1. Push repo to GitHub
-2. New **Web Service** on [render.com](https://render.com) → connect repo
-3. Render picks up `render.yaml` automatically (Docker runtime)
-4. Set env vars in Render dashboard: `GEMINI_API_KEY`, `GROQ_API_KEY`
-5. Deploy
-
-First build takes ~5–8 min (Playwright downloads ~170MB of Chromium). Docker layer cache makes subsequent deploys fast.
