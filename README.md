@@ -14,6 +14,8 @@ AI-powered website intelligence API. Drop in a URL, get competitor analysis, SEO
 
 Ping `/health` before demoing.
 
+## [Why is this special?](cooked.md)
+
 ---
 
 ## Quick Start
