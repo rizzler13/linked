@@ -384,7 +384,13 @@ def _fetch_error_dict(e: FetchError) -> dict:
     return {"code": code_map.get(e.code, "SITE_UNREACHABLE"), "message": e.message}
 
 
+@app.get("/", include_in_schema=False)
+async def dashboard():
+    with open(_STATIC_DIR / "index.html", encoding="utf-8") as f:
+        return HTMLResponse(f.read())
+
+
 try:
-    app.mount("/", StaticFiles(directory=str(_STATIC_DIR), html=True), name="static")
+    app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
 except Exception:
     pass  # static dir may not exist in test environments
